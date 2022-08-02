@@ -7,11 +7,11 @@ import java.util.List;
 public class ChatService {
     private ChatRoomRepository chatRoomRepository;
 
-    public ChatService(){
+    public ChatService() {
         chatRoomRepository = new ChatRoomRepository();
     }
 
-    public long createRoom(String title, String body){
+    public long createRoom(String title, String body) {
         return chatRoomRepository.create(title, body);
     }
 
@@ -19,12 +19,15 @@ public class ChatService {
         return chatRoomRepository.findAll();
     }
 
-    public ChatRoomDto findRoomByYId(long id) {
+    public ChatRoomDto findRoomById(long id) {
         return chatRoomRepository.findById(id);
     }
 
     public void modifyRoom(long id, String title, String body) {
         chatRoomRepository.modify(id, title, body);
-        return;
+    }
+
+    public void deleteRoom(long id) {
+        chatRoomRepository.deleteRoom(id);
     }
 }
