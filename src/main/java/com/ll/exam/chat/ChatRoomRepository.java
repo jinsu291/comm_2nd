@@ -1,6 +1,7 @@
 package com.ll.exam.chat;
 
 import com.ll.exam.article.dto.ArticleDto;
+import com.ll.exam.chat.dto.ChatMessageDto;
 import com.ll.exam.chat.dto.ChatRoomDto;
 
 import java.util.ArrayList;
@@ -40,18 +41,19 @@ public class ChatRoomRepository {
     }
 
     public ChatRoomDto findById(long id) {
-            for(ChatRoomDto chatRoomDto : datum) {
-                if(chatRoomDto.getId() == id) {
-                    return chatRoomDto;
-                }
+        for (ChatRoomDto chatRoomDto : datum) {
+            if (chatRoomDto.getId() == id) {
+                return chatRoomDto;
             }
-            return null;
+        }
+
+        return null;
     }
 
     public void modify(long id, String title, String body) {
         ChatRoomDto chatRoomDto = findById(id);
 
-        if(chatRoomDto == null){
+        if ( chatRoomDto == null ) {
             return;
         }
 
@@ -62,7 +64,7 @@ public class ChatRoomRepository {
     public void deleteRoom(long id) {
         ChatRoomDto chatRoomDto = findById(id);
 
-        if(chatRoomDto == null){
+        if ( chatRoomDto == null ) {
             return;
         }
 
