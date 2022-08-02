@@ -1,7 +1,6 @@
 package com.ll.exam.chat;
 
 import com.ll.exam.Rq;
-import com.ll.exam.article.dto.ArticleDto;
 import com.ll.exam.chat.dto.ChatMessageDto;
 import com.ll.exam.chat.dto.ChatRoomDto;
 
@@ -47,14 +46,14 @@ public class ChatController {
     public void showModifyRoom(Rq rq) {
         long id = rq.getLongPathValueByIndex(0, -1);
 
-        if ( id == -1 ) {
+        if (id == -1) {
             rq.historyBack("번호를 입력해주세요.");
             return;
         }
 
         ChatRoomDto chatRoom = chatService.findRoomById(id);
 
-        if ( chatRoom == null ) {
+        if (chatRoom == null) {
             rq.historyBack("존재하지 않는 채팅방 입니다.");
             return;
         }
@@ -66,28 +65,28 @@ public class ChatController {
     public void doModifyRoom(Rq rq) {
         long id = rq.getLongPathValueByIndex(0, -1);
 
-        if ( id == -1 ) {
+        if (id == -1) {
             rq.historyBack("번호를 입력해주세요.");
             return;
         }
 
         String title = rq.getParam("title", "");
 
-        if ( title.length() == 0 ) {
+        if (title.length() == 0) {
             rq.historyBack("제목을 입력해주세요.");
             return;
         }
 
         String body = rq.getParam("body", "");
 
-        if ( body.length() == 0 ) {
+        if (body.length() == 0) {
             rq.historyBack("내용을 입력해주세요.");
             return;
         }
 
         ChatRoomDto chatRoom = chatService.findRoomById(id);
 
-        if ( chatRoom == null ) {
+        if (chatRoom == null) {
             rq.historyBack("존재하지 않는 채팅방 입니다.");
             return;
         }
@@ -117,18 +116,18 @@ public class ChatController {
         rq.replace("/usr/chat/roomList", "%d번 채팅방이 삭제되었습니다.".formatted(id));
     }
 
-    //ajax 방식으로 채팅메세지를 리스팅
+    // ajax 방식으로 채팅메세지를 리스팅
     public void showRoom(Rq rq) {
         long id = rq.getLongPathValueByIndex(0, -1);
 
-        if ( id == -1 ) {
+        if (id == -1) {
             rq.historyBack("번호를 입력해주세요.");
             return;
         }
 
         ChatRoomDto chatRoomDto = chatService.findRoomById(id);
 
-        if ( chatRoomDto == null ) {
+        if (chatRoomDto == null) {
             rq.historyBack("존재하지 않는 채팅방 입니다.");
             return;
         }
@@ -141,7 +140,7 @@ public class ChatController {
     public void showRoomManual(Rq rq) {
         long id = rq.getLongPathValueByIndex(0, -1);
 
-        if ( id == -1 ) {
+        if (id == -1) {
             rq.historyBack("번호를 입력해주세요.");
             return;
         }
@@ -149,7 +148,7 @@ public class ChatController {
         ChatRoomDto chatRoomDto = chatService.findRoomById(id);
         List<ChatMessageDto> chatMessageDtos = chatService.findMessagesByRoomId(chatRoomDto.getId());
 
-        if ( chatRoomDto == null ) {
+        if (chatRoomDto == null) {
             rq.historyBack("존재하지 않는 채팅방 입니다.");
             return;
         }
@@ -163,21 +162,21 @@ public class ChatController {
     public void doWriteMessage(Rq rq) {
         long roomId = rq.getLongPathValueByIndex(0, -1);
 
-        if ( roomId == -1 ) {
+        if (roomId == -1) {
             rq.historyBack("채팅방 번호를 입력해주세요.");
             return;
         }
 
         ChatRoomDto chatRoom = chatService.findRoomById(roomId);
 
-        if ( chatRoom == null ) {
+        if (chatRoom == null) {
             rq.historyBack("존재하지 않는 채팅방 입니다.");
             return;
         }
 
         String body = rq.getParam("body", "");
 
-        if ( body.trim().length() == 0 ) {
+        if (body.trim().length() == 0) {
             rq.historyBack("내용을 입력해주세요.");
             return;
         }
@@ -185,5 +184,34 @@ public class ChatController {
         chatService.writeMessage(roomId, body);
 
         rq.replace("/usr/chat/room/%d".formatted(roomId), "메세지가 등록되었습니다.");
+    }
+
+    public void getMessages(Rq rq) {
+        long roomId = rq.getLongPathValueByIndex(0, -1);
+
+        if (roomId == -1) {
+            rq.failJson("채팅방 번호를 입력해주세요.");
+            return;
+        }
+
+        ChatRoomDto chatRoom = chatService.findRoomById(roomId);
+
+        if (chatRoom == null) {
+            rq.failJson("존재하지 않는 채팅방 입니다.");
+            return;
+        }
+
+        long fromId = rq.getLongParam("fromId", -1);
+
+        List<ChatMessageDto> chatMessageDtos = null;
+
+        if ( fromId == -1 ) {
+            chatMessageDtos = chatService.findMessagesByRoomId(roomId);
+        }
+        else {
+            chatMessageDtos = chatService.findMessagesByRoomIdGreaterThan(roomId, fromId);
+        }
+
+        rq.successJson(chatMessageDtos);
     }
 }

@@ -21,7 +21,7 @@ public class ChatMessageRepository {
 
     private static void makeTestData() {
         IntStream.rangeClosed(1, 10).forEach(roomId -> {
-            IntStream.rangeClosed(1, 10).forEach(id -> {
+            IntStream.rangeClosed(1, 2).forEach(id -> {
                 String body = "메세지 %d".formatted(id);
                 write(roomId, body);
             });
@@ -41,6 +41,14 @@ public class ChatMessageRepository {
         return datum
                 .stream()
                 .filter(chatMessageDto -> chatMessageDto.getRoomId() == roomId)
+                .collect(Collectors.toList());
+    }
+
+    public List<ChatMessageDto> findByRoomIdGreaterThan(long roomId, long fromId) {
+        return datum
+                .stream()
+                .filter(chatMessageDto -> chatMessageDto.getRoomId() == roomId)
+                .filter(chatMessageDto -> chatMessageDto.getId() > fromId)
                 .collect(Collectors.toList());
     }
 }
