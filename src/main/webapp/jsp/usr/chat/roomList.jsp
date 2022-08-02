@@ -5,7 +5,7 @@
 
 <section>
     <div class="container px-3 mx-auto">
-        <h1 class="font-bold text-lg">채팅방 리스트</h1>
+        <h1 class="font-bold text-lg">채팅방 수정</h1>
 
         <ul class="mt-5">
             <c:forEach items="${rooms}" var="room">

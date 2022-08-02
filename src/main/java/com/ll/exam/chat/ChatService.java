@@ -18,4 +18,8 @@ public class ChatService {
     public List<ChatRoomDto> findAllRooms() {
         return chatRoomRepository.findAll();
     }
+
+    public ChatRoomDto findRoomByYId(long id) {
+        return chatRoomRepository.findById(id);
+    }
 }
